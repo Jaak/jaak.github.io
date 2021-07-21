@@ -14,8 +14,7 @@ fn make_vanilla_service() -> HyperClient {
 
 type Svc = Timeout<HyperClient>;
 fn make_service() -> Svc {
-    let https = HttpsConnector::new();
-    let client = Client::builder().build::<_, hyper::Body>(https);
+    let client = make_vanilla_service();
     ServiceBuilder::new()
         .timeout(Duration::from_secs(5))
         .service(client)
@@ -24,9 +23,9 @@ fn make_service() -> Svc {
 /*
 
 error[E0277]: the size for values of type `dyn std::error::Error + Send + Sync` cannot be known at compilation time
-  --> src/main.rs:44:43
+  --> src/main.rs:43:43
    |
-44 |     let mut resp = service.call(req).await?;
+43 |     let mut resp = service.call(req).await?;
    |                                           ^ doesn't have a size known at compile-time
    |
    = help: the trait `Sized` is not implemented for `dyn std::error::Error + Send + Sync`
